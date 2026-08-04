@@ -1,1 +1,35 @@
+import numpy as np
+from sklearn.mixture import GaussianMixture
 
+X = np.array([
+    [1.0],
+    [1.5],
+    [2.0],
+    [2.5],
+    [8.0],
+    [8.5],
+    [9.0],
+    [9.5]
+])
+
+model = GaussianMixture(
+    n_components=2,
+    random_state=42
+)
+
+model.fit(X)
+
+labels = model.predict(X)
+
+print("Cluster Assignments:")
+
+for i in range(len(X)):
+    print("Data:", X[i][0], "Cluster:", labels[i])
+
+print("\nCluster Means:")
+
+print(model.means_)
+
+print("\nCluster Probabilities:")
+
+print(model.predict_proba(X))
