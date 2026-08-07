@@ -1,1 +1,39 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
 
+data = {
+    'Age': [25,35,45,23,52,40,60,48,33,28,31,50,42,29,55],
+    'Income': [30000,50000,80000,25000,90000,70000,100000,85000,45000,35000,42000,95000,75000,38000,98000],
+    'Loan': [5000,10000,20000,3000,25000,15000,30000,22000,12000,7000,9000,26000,18000,6000,28000],
+    'CreditScore': ['Poor','Average','Good','Poor','Good','Good','Good','Good','Average','Poor','Average','Good','Good','Poor','Good']
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Age', 'Income', 'Loan']]
+y = df['CreditScore']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix")
+print(confusion_matrix(y_test, y_pred))
+
+sample = pd.DataFrame({
+    'Age': [30],
+    'Income': [40000],
+    'Loan': [8000]
+})
+
+prediction = model.predict(sample)
+
+print("\nPredicted Credit Score:", prediction[0])
