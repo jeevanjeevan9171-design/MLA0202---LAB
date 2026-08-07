@@ -1,1 +1,53 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
 
+data = {
+    'Area':[1000,1200,1500,1800,2000,2200,2500,2800,3000,3500],
+    'Bedrooms':[2,2,3,3,4,4,4,5,5,5],
+    'Age':[15,10,8,7,5,4,3,2,1,1],
+    'Price':[3500000,4200000,5200000,6100000,7000000,7600000,8500000,9300000,10000000,11500000]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Area','Bedrooms','Age']]
+y = df['Price']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
+
+model = LinearRegression()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("========== HOUSE PRICE PREDICTION ==========")
+
+print("\nTesting Data")
+print(X_test)
+
+print("\nActual House Prices")
+print(y_test.values)
+
+print("\nPredicted House Prices")
+print(y_pred.round(2))
+
+print("\nMean Squared Error :", round(mean_squared_error(y_test, y_pred),2))
+print("R2 Score           :", round(r2_score(y_test, y_pred),4))
+
+sample = pd.DataFrame({
+    'Area':[2400],
+    'Bedrooms':[4],
+    'Age':[3]
+})
+
+prediction = model.predict(sample)
+
+print("\n========== NEW HOUSE PREDICTION ==========")
+print("Area      :",2400,"sq.ft")
+print("Bedrooms  :",4)
+print("Age       :",3,"Years")
+print("Predicted Price : ₹",round(prediction[0],2))
