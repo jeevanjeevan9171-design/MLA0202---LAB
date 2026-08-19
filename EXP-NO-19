@@ -1,1 +1,31 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.naive_bayes import GaussianNB
 
+data = {
+    "Age": [25, 35, 45, 28, 50, 40, 23, 55, 30, 48],
+    "Income": [25, 45, 60, 30, 80, 55, 20, 90, 40, 70],
+    "LoanAmount": [10, 20, 30, 12, 40, 25, 8, 45, 18, 35],
+    "CreditScore": [650, 700, 750, 680, 800, 720, 620, 810, 690, 760],
+    "LoanApproved": [
+        "No", "Yes", "Yes", "No", "Yes",
+        "Yes", "No", "Yes", "No", "Yes"
+    ]
+}
+
+df = pd.DataFrame(data)
+
+X = df[["Age", "Income", "LoanAmount", "CreditScore"]]
+y = df["LoanApproved"]
+
+encoder = LabelEncoder()
+y = encoder.fit_transform(y)
+
+model = GaussianNB()
+model.fit(X, y)
+
+new_customer = [[32, 50, 20, 710]]
+
+prediction = model.predict(new_customer)
+
+print("Loan Prediction:", encoder.inverse_transform(prediction)[0])
