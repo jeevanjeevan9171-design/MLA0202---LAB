@@ -1,1 +1,40 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+data = {
+    'RAM': [2, 3, 4, 4, 6, 8, 8, 12, 12, 16],
+    'Storage': [32, 32, 64, 128, 128, 128, 256, 256, 512, 512],
+    'Battery': [2500, 3000, 3500, 4000, 4000,
+                4500, 5000, 5000, 5500, 6000],
+    'Price_Range': [0, 0, 1, 1, 1, 2, 2, 2, 3, 3]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['RAM', 'Storage', 'Battery']]
+y = df['Price_Range']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Predicted:", y_pred)
+print("Actual:", y_test.values)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+new_mobile = [[8, 256, 5000]]
+
+print("Predicted Price Range:",
+      model.predict(new_mobile)[0])
 
